@@ -6,14 +6,6 @@ import requests
 TOKEN = "TOKEN"
 app = Flask(__name__)
 
-def parse_message(message):
-    print("message-->",message)
-    chat_id = message['message']['chat']['id']
-    txt = message['message']['text']
-    print("chat_id-->", chat_id)
-    print("txt-->", txt)
-    return chat_id,txt
-
 def tel_send_message(chat_id, text):
     url = f'https://api.telegram.org/bot{TOKEN}/sendRichMessage'
     payload = {
@@ -23,18 +15,20 @@ def tel_send_message(chat_id, text):
 
     r = requests.post(url,json=payload)
     return r
+    	
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        msg = request.get_json()
-        print('super')
+        message = request.get_json()
 
-        chat_id,txt = parse_message(msg)
-        print(chat_id,txt)
+        try:
+        	chat_id = message['message']['chat']['id']
+        	txt = message['message']['text']
+        	tel_send_message(chat_id,txt)
+        except KeyError:
+        	tel_send_message(chat_id,"Please send a plain text message, not forwarded from anyone")
         
-        tel_send_message(chat_id,txt)
-
         return Response('ok', status=200)
     else:
         return "<h1>Welcome!</h1>"
