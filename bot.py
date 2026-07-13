@@ -15,10 +15,10 @@ def parse_message(message):
     return chat_id,txt
 
 def tel_send_message(chat_id, text):
-    url = f'https://api.telegram.org/bot{TOKEN}/sendMessage'
+    url = f'https://api.telegram.org/bot{TOKEN}/sendRichMessage'
     payload = {
                 'chat_id': chat_id,
-                'text': text
+                'rich_message': {'markdown': text}
                 }
 
     r = requests.post(url,json=payload)
@@ -28,12 +28,12 @@ def tel_send_message(chat_id, text):
 def index():
     if request.method == 'POST':
         msg = request.get_json()
+        print('super')
 
         chat_id,txt = parse_message(msg)
-        if txt == "hi":
-            tel_send_message(chat_id,"Hello!!")
-        else:
-            tel_send_message(chat_id,'from webhook')
+        print(chat_id,txt)
+        
+        tel_send_message(chat_id,txt)
 
         return Response('ok', status=200)
     else:
