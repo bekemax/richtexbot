@@ -27,6 +27,7 @@ def index():
         	txt = message['message']['text']
         	tel_send_message(chat_id,txt)
         except KeyError:
+        	print(message)
         	tel_send_message(chat_id,"Please send a plain text message, not forwarded from anyone")
         
         return Response('ok', status=200)
