@@ -21,15 +21,13 @@ def tel_send_message(chat_id, text):
 def index():
     if request.method == 'POST':
         message = request.get_json()
-		print(message)
+
         try:
         	chat_id = message['message']['chat']['id']
         	txt = message['message']['text']
         	tel_send_message(chat_id,txt)
         except KeyError:
-        	print(message)
-        	chat_id = message['message']['chat']['id']
-        	tel_send_message(chat_id,"Please send a plain text message, not forwarded from anyone")
+        	pass
         
         return Response('ok', status=200)
     else:
